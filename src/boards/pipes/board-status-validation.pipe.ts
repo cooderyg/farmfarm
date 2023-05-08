@@ -1,20 +1,20 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { BoardStatus } from '../board.model';
+import { BoardStatus } from '../board-status-enum';
 
-export class BoardStatusValidetionPipe implements PipeTransform {
+export class BoardStatusValidationPipe implements PipeTransform {
   readonly StatusOptions = [BoardStatus.PRIVATE, BoardStatus.PUBLIC];
 
   transform(value: any) {
-    value = value.toUpperCase();
-
+    value.toUpperCase();
     if (!this.isStatusValid(value)) {
-      throw new BadRequestException(`${value} 값이 유효하지 않습니다.`);
+      throw new BadRequestException(`${value} isn't in the status options`);
     }
+
     return value;
   }
 
   private isStatusValid(status: any) {
     const index = this.StatusOptions.indexOf(status);
-    return index != -1;
+    return index !== -1;
   }
 }
